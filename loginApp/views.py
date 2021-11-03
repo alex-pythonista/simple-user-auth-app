@@ -7,7 +7,7 @@ from django.urls import reverse
 
 
 from .models import UserProfile
-
+from core.views import home
 # Create your views here.
 
 def register(request):
@@ -33,19 +33,17 @@ def register(request):
 
 def login_user(request):
 
-    if request.POST == 'POST':
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         user = authenticate(username=username, password=password)
 
         if user:
-            if user.is_active():
+            if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect(reverse('/'))
-            
-            else:
-                return HttpResponse("Account is not active!") 
+                return HttpResponseRedirect(reverse(home))
+             
         else:
             return HttpResponse("invalid login information!")
 
