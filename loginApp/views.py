@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
-
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+
+
 from .models import UserProfile
 
 # Create your views here.
@@ -18,15 +23,33 @@ def register(request):
         user_obj.set_password(password)
         user_obj.save()
 
+        return HttpResponseRedirect(reverse('loginApp:login'))
 
-    context = {}
-    template_name = 'loginApp/register.html'
-    return render(request, template_name, context)
+    else:    
+        context = {}
+        template_name = 'loginApp/register.html'
+        return render(request, template_name, context)
 
 
 def login_user(request):
 
+    if request.POST == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-    context = {}
-    template_name = 'loginApp/login.html'
-    return render(request, template_name, context)
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active():
+                login(request, user)
+                return HttpResponseRedirect(reverse('/'))
+            
+            else:
+                return HttpResponse("Account is not active!") 
+        else:
+            return HttpResponse("invalid login information!")
+
+    else:
+        context = {}
+        template_name = 'loginApp/login.html'
+        return render(request, template_name, context)

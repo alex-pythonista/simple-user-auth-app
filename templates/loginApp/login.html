@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-  	<title>Register</title>
+  	<title>Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -34,7 +34,7 @@
                     </div>
                 {% csrf_token %}
 	          </form>
-	          <p>I'm new here! <a data-toggle="tab" href="#signin">Register</a></p>
+	          <p>I'm new here! <a href="{% url 'loginApp:register' %}">Register</a></p>
 	        </div>
 				</div>
 			</div>
